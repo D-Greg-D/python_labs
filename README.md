@@ -1,6 +1,18 @@
-# **Лабораторные работы Даниля Григорьянца (БИВТ-25-1)**
+> # Лабораторные работы Даниля Григорьянца (БИВТ-25-1)
 
 # Лабораторная работа 2
+
+## Проверка функций в каждом файле была реализована подобным кодом:
+```python
+test_cases = {}
+test_cases["function_name"] = [[3, -1, 5, 5, 0], [42], [-5, -2, -9], [], [1.5, 2, 2.0, -3.1]]
+
+print("Тесты функции function_name\n")
+for param in test_cases["function_name"]:
+    print(f"{str(param):<fancy_number} -> {function_name(param)}")
+print()
+```
+`fancy_number` - это фиксированное для каждого файла число, а `{str(param):<fancy_number>}` просто выравнивает все ответы для простоты чтения.
 
 ## Задание 1
 
@@ -25,22 +37,9 @@ def flatten(mat: list[list | tuple]) -> list | type[TypeError]:
         else:
             ret.extend(row)
     return ret
-
-
-test_cases = {}
-test_cases["min_max"] = [[3, -1, 5, 5, 0], [42], [-5, -2, -9], [], [1.5, 2, 2.0, -3.1]]
-test_cases["unique_sorted"] = [[3, 1, 2, 1, 3], [], [-1, -1, 0, 2, 2], [1.0, 1, 2.5, 2.5, 0]]
-test_cases["flatten"] = [[[1, 2], [3, 4]], [[1, 2], (3, 4, 5)], [[1], [], [2, 3]], [[1, 2], "ab"]]
-
-for param in test_cases["min_max"]:
-    print(min_max(param))
-
-for param in test_cases["unique_sorted"]:
-    print(unique_sorted(param))
-
-for param in test_cases["flatten"]:
-    print(flatten(param))
 ```
+
+![Задание 1](./images/lab02/arrays.png)
 
 ## Задание 2
 
@@ -90,37 +89,33 @@ def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
     if transposed_mat is ValueError:
         return ValueError
     return row_sums(transposed_mat)
-
-
-test_cases = {}
-test_cases["transpose"] = [[[1, 2, 3]], [[1], [2], [3]], [[1, 2], [3, 4]], [], [[1, 2], [3]]]
-test_cases["row_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
-test_cases["col_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
-
-for param in test_cases["transpose"]:
-    print(transpose(param))
-
-for param in test_cases["row_sums"]:
-    print(row_sums(param))
-
-for param in test_cases["col_sums"]:
-    print(col_sums(param))
 ```
+
+Отдельно была вынесена функция `width`, объединяющая проверку матрицы на прямоугольность и нахождение длины её строки, поскольку её функционал используется в двух функциях, а также может быть использован в будущем.
+
+![Задание 2](./images/lab02/matrix.png)
 
 ## Задание 3
 
 ```python
 def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[TypeError]:
     if not isinstance(rec[2], float):
+        """Неверный формат GPA"""
         return TypeError
+    
     if rec[1] == "":
+        """Название группы пустое"""
         return ValueError
+    
     name = rec[0].split(" ")
     while "" in name:
         name.remove("")
+    
     if len(name) <= 1:
+        """Только фамилия"""
         return ValueError
     elif len(name) > 3:
+        """Больше двух слов на имя и отчество"""
         return ValueError
     
     return_name = ""
@@ -135,12 +130,9 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
     return_group = "".join(["гр. ", rec[1]])
     return_gpa = rec[2]
     return f"{return_name}, {return_group}, {return_gpa:.2f}"
-
-test_cases = [("Иванов Иван Иванович", "BIVT-25", 4.6), ("Петров Пётр", "IKBO-12", 5.0), ("Петров Пётр Петрович", "IKBO-12", 5.0),
-    ("  сидорова  анна   сергеевна ", "ABB-01", 3.999), ("Пупупушкин", "PK-00", 2.0), ("Михайлов Стас", "", 6.0), ("Колесников Денис", "LI-2", "5.0")]
-for param in test_cases:
-    print(format_record(param))
 ```
+
+![Задание 3](./images/lab02/tuples.png)
 
 # Лабораторная работа 1
 

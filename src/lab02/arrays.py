@@ -25,11 +25,16 @@ test_cases["min_max"] = [[3, -1, 5, 5, 0], [42], [-5, -2, -9], [], [1.5, 2, 2.0,
 test_cases["unique_sorted"] = [[3, 1, 2, 1, 3], [], [-1, -1, 0, 2, 2], [1.0, 1, 2.5, 2.5, 0]]
 test_cases["flatten"] = [[[1, 2], [3, 4]], [[1, 2], (3, 4, 5)], [[1], [], [2, 3]], [[1, 2], "ab"]]
 
+print("Тесты функции min_max\n")
 for param in test_cases["min_max"]:
-    print(min_max(param))
+    print(f"{str(param):<24} -> {min_max(param)}")
+print()
 
+print("Тесты функции unique_sorted\n")
 for param in test_cases["unique_sorted"]:
-    print(unique_sorted(param))
+    print(f"{str(param):<24} -> {unique_sorted(param)}")
+print()
 
+print("Тесты функции flatten\n")
 for param in test_cases["flatten"]:
-    print(flatten(param))
+    print(f"{str(param):<24} -> {flatten(param)}")

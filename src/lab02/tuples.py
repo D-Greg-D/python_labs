@@ -1,14 +1,21 @@
 def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[TypeError]:
     if not isinstance(rec[2], float):
+        """Неверный формат GPA"""
         return TypeError
+    
     if rec[1] == "":
+        """Название группы пустое"""
         return ValueError
+    
     name = rec[0].split(" ")
     while "" in name:
         name.remove("")
+    
     if len(name) <= 1:
+        """Только фамилия"""
         return ValueError
     elif len(name) > 3:
+        """Больше двух слов на имя и отчество"""
         return ValueError
     
     return_name = ""
@@ -24,7 +31,10 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
     return_gpa = rec[2]
     return f"{return_name}, {return_group}, {return_gpa:.2f}"
 
-test_cases = [("Иванов Иван Иванович", "BIVT-25", 4.6), ("Петров Пётр", "IKBO-12", 5.0), ("Петров Пётр Петрович", "IKBO-12", 5.0),
+test_cases = {}
+test_cases["format_record"] = [("Иванов Иван Иванович", "BIVT-25", 4.6), ("Петров Пётр", "IKBO-12", 5.0), ("Петров Пётр Петрович", "IKBO-12", 5.0),
     ("  сидорова  анна   сергеевна ", "ABB-01", 3.999), ("Пупупушкин", "PK-00", 2.0), ("Михайлов Стас", "", 6.0), ("Колесников Денис", "LI-2", "5.0")]
-for param in test_cases:
-    print(format_record(param))
+
+print("Тесты функции format_record\n")
+for param in test_cases["format_record"]:
+    print(f"{str(param):<56} -> {format_record(param)}")

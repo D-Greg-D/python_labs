@@ -50,11 +50,16 @@ test_cases["transpose"] = [[[1, 2, 3]], [[1], [2], [3]], [[1, 2], [3, 4]], [], [
 test_cases["row_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
 test_cases["col_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
 
+print("Тесты функции transpose\n")
 for param in test_cases["transpose"]:
-    print(transpose(param))
+    print(f"{str(param):<24} -> {transpose(param)}")
+print()
 
+print("Тесты функции row_sums\n")
 for param in test_cases["row_sums"]:
-    print(row_sums(param))
+    print(f"{str(param):<24} -> {row_sums(param)}")
+print()
 
+print("Тесты функции col_sums\n")
 for param in test_cases["col_sums"]:
-    print(col_sums(param))
+    print(f"{str(param):<24} -> {col_sums(param)}")
