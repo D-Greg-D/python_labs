@@ -2,25 +2,23 @@ def min_max(nums: list[float | int]) -> tuple[float | int, float | int] | type[V
     if len(nums) <= 0:
         return ValueError
     
-    min, max = nums[0], nums[0]
-    for num in nums:
-        if num < min:
-            min = num
-        if num > max:
-            max = num
-    return (min, max)
+    nums_min, nums_max = min(nums), max(nums)
+    return (nums_min, nums_max)
+
 
 def unique_sorted(nums: list[float | int]) -> list[float | int]:
     return sorted(list(set(nums)))
 
+
 def flatten(mat: list[list | tuple]) -> list | type[TypeError]:
     ret = []
-    for sth in mat:
-        if (not isinstance(sth, list)) & (not isinstance(sth, tuple)):
+    for row in mat:
+        if (not isinstance(row, list)) & (not isinstance(row, tuple)):
             return TypeError
         else:
-            ret.extend(list(sth))
+            ret.extend(row)
     return ret
+
 
 test_cases = {}
 test_cases["min_max"] = [[3, -1, 5, 5, 0], [42], [-5, -2, -9], [], [1.5, 2, 2.0, -3.1]]
