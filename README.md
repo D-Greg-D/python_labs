@@ -90,14 +90,14 @@ def row_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
         sums.append(sum)
     
     return sums
-    
-    
-    def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
-        """Функция считает суммы значений в столбцах матрицы или выводит ValueError, если матрица рваная"""
-        transposed_mat = transpose(mat)
-        if transposed_mat is ValueError:
-            return ValueError
-        return row_sums(transposed_mat)
+
+
+def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
+    """Функция считает суммы значений в столбцах матрицы или выводит ValueError, если матрица рваная"""
+    transposed_mat = transpose(mat)
+    if transposed_mat is ValueError:
+        return ValueError
+    return row_sums(transposed_mat)
 ```
 
 Отдельно была вынесена функция `width`, объединяющая проверку матрицы на прямоугольность и нахождение длины её строки, поскольку её функционал используется в двух функциях, а также может быть использован в будущем.
