@@ -1,4 +1,5 @@
 def width(mat: list[list[float | int]]) -> int:
+    """Функция выводит длину строки, если матрица прямоугольная, и -1, если она рваная"""
     if len(mat) == 0:
         return 0
     
@@ -11,6 +12,7 @@ def width(mat: list[list[float | int]]) -> int:
 
 
 def transpose(mat: list[list[float | int]]) -> list[list[float | int]] | type[ValueError]:
+    """Функция транспонирует матрицу или выводит ValueError, если матрица рваная"""
     mat_width = width(mat)
     if mat_width == -1:
         return ValueError
@@ -24,6 +26,7 @@ def transpose(mat: list[list[float | int]]) -> list[list[float | int]] | type[Va
 
 
 def row_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
+    """Функция считает суммы значений в строках матрицы или выводит ValueError, если матрица рваная"""
     sums = []
     mat_width = width(mat)
     if mat_width == -1:
@@ -39,6 +42,7 @@ def row_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
 
 
 def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
+    """Функция считает суммы значений в столбцах матрицы или выводит ValueError, если матрица рваная"""
     transposed_mat = transpose(mat)
     if transposed_mat is ValueError:
         return ValueError

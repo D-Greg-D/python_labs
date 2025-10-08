@@ -1,10 +1,12 @@
 def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[TypeError]:
+    """
+    TypeError выводится в случае, если третье значение (GPA) не формата float
+    ValueError выводится в случаях, если первое значение (ФИО) состоит из менее двух или более трёх слов или второе значение (название группы) пустое
+    """
     if not isinstance(rec[2], float):
-        """Неверный формат GPA"""
         return TypeError
     
     if rec[1] == "":
-        """Название группы пустое"""
         return ValueError
     
     name = rec[0].split(" ")
@@ -12,10 +14,8 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
         name.remove("")
     
     if len(name) <= 1:
-        """Только фамилия"""
         return ValueError
     elif len(name) > 3:
-        """Больше двух слов на имя и отчество"""
         return ValueError
     
     return_name = ""
@@ -27,7 +27,7 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
         else:
             return_name = "".join([return_name, part[0].upper(), "."])
     
-    return_group = "".join(["гр. ", rec[1]])
+    return_group = "".join(["гр. ", rec[1].strip()])
     return_gpa = rec[2]
     return f"{return_name}, {return_group}, {return_gpa:.2f}"
 

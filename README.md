@@ -1,4 +1,6 @@
-> # Лабораторные работы Даниля Григорьянца (БИВТ-25-1)
+> # Даниль Григорьянц
+>
+> ## БИВТ-25-1
 
 # Лабораторная работа 2
 
@@ -12,12 +14,13 @@ for param in test_cases["function_name"]:
     print(f"{str(param):<fancy_number} -> {function_name(param)}")
 print()
 ```
-`fancy_number` - это фиксированное для каждого файла число, а `{str(param):<fancy_number>}` просто выравнивает все ответы для простоты чтения.
+`fancy_number` - это фиксированное для каждого файла число, а `{str(param):<fancy_number>}` выравнивает все ответы для простоты чтения.
 
 ## Задание 1
 
 ```python
 def min_max(nums: list[float | int]) -> tuple[float | int, float | int] | type[ValueError]:
+    """Функция выводит минимум и максимум в списке или ValueError, если список пустой"""
     if len(nums) <= 0:
         return ValueError
     
@@ -26,10 +29,12 @@ def min_max(nums: list[float | int]) -> tuple[float | int, float | int] | type[V
 
 
 def unique_sorted(nums: list[float | int]) -> list[float | int]:
+    """Функция выводит отсортированный список различных элементов вводного списка"""
     return sorted(list(set(nums)))
 
 
 def flatten(mat: list[list | tuple]) -> list | type[TypeError]:
+    """Функция выводит "расплющенный" список списков/кортежей в один список по строкам или TypeError, если в списке встречается не список/кортеж"""
     ret = []
     for row in mat:
         if (not isinstance(row, list)) & (not isinstance(row, tuple)):
@@ -45,6 +50,7 @@ def flatten(mat: list[list | tuple]) -> list | type[TypeError]:
 
 ```python
 def width(mat: list[list[float | int]]) -> int:
+    """Функция выводит длину строки, если матрица прямоугольная, и -1, если она рваная"""
     if len(mat) == 0:
         return 0
     
@@ -57,6 +63,7 @@ def width(mat: list[list[float | int]]) -> int:
 
 
 def transpose(mat: list[list[float | int]]) -> list[list[float | int]] | type[ValueError]:
+    """Функция транспонирует матрицу или выводит ValueError, если матрица рваная"""
     mat_width = width(mat)
     if mat_width == -1:
         return ValueError
@@ -70,6 +77,7 @@ def transpose(mat: list[list[float | int]]) -> list[list[float | int]] | type[Va
 
 
 def row_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
+    """Функция считает суммы значений в строках матрицы или выводит ValueError, если матрица рваная"""
     sums = []
     mat_width = width(mat)
     if mat_width == -1:
@@ -82,13 +90,14 @@ def row_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
         sums.append(sum)
     
     return sums
-
-
-def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
-    transposed_mat = transpose(mat)
-    if transposed_mat is ValueError:
-        return ValueError
-    return row_sums(transposed_mat)
+    
+    
+    def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
+        """Функция считает суммы значений в столбцах матрицы или выводит ValueError, если матрица рваная"""
+        transposed_mat = transpose(mat)
+        if transposed_mat is ValueError:
+            return ValueError
+        return row_sums(transposed_mat)
 ```
 
 Отдельно была вынесена функция `width`, объединяющая проверку матрицы на прямоугольность и нахождение длины её строки, поскольку её функционал используется в двух функциях, а также может быть использован в будущем.
@@ -99,12 +108,14 @@ def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
 
 ```python
 def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[TypeError]:
+    """
+    TypeError выводится в случае, если третье значение (GPA) не формата float
+    ValueError выводится в случаях, если первое значение (ФИО) состоит из менее двух или более трёх слов или второе значение (название группы) пустое
+    """
     if not isinstance(rec[2], float):
-        """Неверный формат GPA"""
         return TypeError
     
     if rec[1] == "":
-        """Название группы пустое"""
         return ValueError
     
     name = rec[0].split(" ")
@@ -112,10 +123,8 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
         name.remove("")
     
     if len(name) <= 1:
-        """Только фамилия"""
         return ValueError
     elif len(name) > 3:
-        """Больше двух слов на имя и отчество"""
         return ValueError
     
     return_name = ""
@@ -127,7 +136,7 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
         else:
             return_name = "".join([return_name, part[0].upper(), "."])
     
-    return_group = "".join(["гр. ", rec[1]])
+    return_group = "".join(["гр. ", rec[1].strip()])
     return_gpa = rec[2]
     return f"{return_name}, {return_group}, {return_gpa:.2f}"
 ```
