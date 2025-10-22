@@ -24,20 +24,20 @@ def flatten(mat: list[list | tuple]) -> list | type[TypeError]:
 
 
 test_cases = {}
-test_cases["min_max"] = [[3, -1, 5, 5, 0], [42], [-5, -2, -9], [], [1.5, 2, 2.0, -3.1]]
-test_cases["unique_sorted"] = [[3, 1, 2, 1, 3], [], [-1, -1, 0, 2, 2], [1.0, 1, 2.5, 2.5, 0]]
-test_cases["flatten"] = [[[1, 2], [3, 4]], [[1, 2], (3, 4, 5)], [[1], [], [2, 3]], [[1, 2], "ab"]]
+test_cases["min_max"] = [[1, 4.0, 6], [2, 0, 0, 6], [1], [1, 1], [22.17, 35, 40], []]
+test_cases["unique_sorted"] = [[4], [], [5, 3.3, 2.8, -91, -5.2], [324, -324, 0]]
+test_cases["flatten"] = [[4, 5], [[4], [5]], [(8, 0, 2), [4, 6], (3, 2)], [[1, 4], "it's a number trust me"], [(1), 2]]
 
 print("Тесты функции min_max\n")
 for param in test_cases["min_max"]:
-    print(f"{str(param):<24} -> {min_max(param)}")
+    print(f"{str(param):<32} -> {min_max(param)}")
 print()
 
 print("Тесты функции unique_sorted\n")
 for param in test_cases["unique_sorted"]:
-    print(f"{str(param):<24} -> {unique_sorted(param)}")
+    print(f"{str(param):<32} -> {unique_sorted(param)}")
 print()
 
 print("Тесты функции flatten\n")
 for param in test_cases["flatten"]:
-    print(f"{str(param):<24} -> {flatten(param)}")
+    print(f"{str(param):<32} -> {flatten(param)}")

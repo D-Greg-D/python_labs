@@ -32,8 +32,8 @@ def format_record(rec: tuple[str, str, float]) -> str | type[ValueError] | type[
     return f"{return_name}, {return_group}, {return_gpa:.2f}"
 
 test_cases = {}
-test_cases["format_record"] = [("Иванов Иван Иванович", "BIVT-25", 4.6), ("Петров Пётр", "IKBO-12", 5.0), ("Петров Пётр Петрович", "IKBO-12", 5.0),
-    ("  сидорова  анна   сергеевна ", "ABB-01", 3.999), ("Пупупушкин", "PK-00", 2.0), ("Михайлов Стас", "", 6.0), ("Колесников Денис", "LI-2", "5.0")]
+test_cases["format_record"] = [("Григорьев Денис Данилович", "BIVT-25-1", 5.0), ("Горький Владимир", "IKN-BIVT-0", 3.333), ("Сидоров Сидор Сидорович", "GN-5", 4.1),
+    ("  щербакова  анна   станиславовна ", "FK-01", 6.0), ("Пупупушкин", "PK-00", 2.0), ("Михайлов Стас", "", 6.0), ("Колесников Денис", "LI-2", "5.0")]
 
 print("Тесты функции format_record\n")
 for param in test_cases["format_record"]:

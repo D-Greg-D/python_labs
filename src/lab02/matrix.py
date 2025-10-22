@@ -50,20 +50,20 @@ def col_sums(mat: list[list[float | int]]) -> list[float] | type[ValueError]:
 
 
 test_cases = {}
-test_cases["transpose"] = [[[1, 2, 3]], [[1], [2], [3]], [[1, 2], [3, 4]], [], [[1, 2], [3]]]
-test_cases["row_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
-test_cases["col_sums"] = [[[1, 2, 3], [4, 5, 6]], [[-1, 1], [10, -10]], [[0, 0], [0, 0]], [[1, 2], [3]]]
+test_cases["transpose"] = [[[4]], [], [[4, 6], [4.2, 5]], [[9, 0, 1], [1, 4, 5]]]
+test_cases["row_sums"] = [[[1, 2, 3, 4], [2, 4, 6, 8], [3, 6, 9, 12]], [[2, 3, 5], [7, 11, 13], [17, 19, 23]]]
+test_cases["col_sums"] = [[[1, 2, 3, 4], [2, 4, 6, 8], [3, 6, 9, 12]], [[2, 3, 5], [7, 11, 13], [17, 19, 23]]]
 
 print("Тесты функции transpose\n")
 for param in test_cases["transpose"]:
-    print(f"{str(param):<24} -> {transpose(param)}")
+    print(f"{str(param):<48} -> {transpose(param)}")
 print()
 
 print("Тесты функции row_sums\n")
 for param in test_cases["row_sums"]:
-    print(f"{str(param):<24} -> {row_sums(param)}")
+    print(f"{str(param):<48} -> {row_sums(param)}")
 print()
 
 print("Тесты функции col_sums\n")
 for param in test_cases["col_sums"]:
-    print(f"{str(param):<24} -> {col_sums(param)}")
+    print(f"{str(param):<48} -> {col_sums(param)}")
