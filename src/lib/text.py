@@ -4,13 +4,13 @@ def normalize(text: str, *, casefold: bool = True, yo2e: bool = True) -> str:
     if yo2e:
         text = text.replace("ё", "е")
     text = text.replace("\t", " ").replace("\r", " ").replace("\n", " ")
-    while text.count("  ") > 0:
+    while "  " in text:
         text = text.replace("  ", " ")
     text = text.strip()
     return text
 
 def tokenize(text: str) -> list[str]:
-    while text.count("--") > 0:
+    while "--" in text:
         text = text.replace("--", " ")
     for letter in text:
         if not (letter.isalnum() or letter == "_" or letter == "-"):

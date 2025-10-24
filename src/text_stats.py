@@ -1,4 +1,3 @@
-import tokenize
 from lib.text import *
 
 in_text = input()
