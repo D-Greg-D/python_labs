@@ -345,63 +345,128 @@ def top_n(freq: dict[str, int], n: int = 5) -> list[tuple[str, int]]:
 
 ![Задание A](./images/lab03/text.png)
 
-Для проверки функций в `src/lib/text.py` была реализована отдельная функция `src/lib/text_test.py`, вызывающая функции из первого файла с различными вводными данными и выводящая результат работы, используя функцию `test_print`:
-
-```python
-from test import test_print
-from text import *
-
-test_cases = {}
-test_cases["normalize"] = [
-    (["ПрИвЕт\nМИр\t"], "привет мир"),
-    (["ёжик, Ёлка"], "ежик, елка"),
-    (["Hello\r\nWorld"], "hello world"),
-    (["  двойные   пробелы  "], "двойные пробелы")]
-test_cases["tokenize"] = [
-    (["привет мир"], ["привет", "мир"]),
-    (["hello,world!!!"], ["hello", "world"]),
-    (["по-настоящему круто"], ["по-настоящему", "круто"]),
-    (["2025 год"], ["2025", "год"]),
-    (["emoji 😀 не слово"], ["emoji", "не", "слово"]),
-    (["-my, great--test-"], ["my", "great", "test"])]
-test_cases["count_freq"] = [
-    ([["a","b","a","c","b","a"]], {"a":3,"b":2,"c":1}),
-    ([["bb","aa","bb","aa","cc"]], {"aa":2,"bb":2,"cc":1})]
-test_cases["top_n"] = [
-    ([{"a":3,"b":2,"c":1}, 2], [("a",3), ("b",2)]),
-    ([{"aa":2,"bb":2,"cc":1}, 2], [("aa",2), ("bb",2)])]
-
-test_print(test_cases["normalize"], normalize, 32)
-test_print(test_cases["tokenize"], tokenize, 32)
-test_print(test_cases["count_freq"], count_freq, 32)
-test_print(test_cases["top_n"], top_n, 32)
-```
-
 ## Задание B
 
 ```python
+import sys
+sys.path.insert(0, "src")
 from lib.text import *
 
-in_text = input()
-in_text = normalize(in_text)
-tokens = tokenize(in_text)
-unique_words = count_freq(tokens)
-top_5 = top_n(unique_words)
+def text_stats(in_text: str) -> None:
+    in_text = normalize(in_text)
+    tokens = tokenize(in_text)
+    unique_words = count_freq(tokens)
+    top_5 = top_n(unique_words)
+    
+    print(f"Всего слов: {len(tokens)}")
+    print(f"Уникальных слов: {len(unique_words)}")
+    print("Топ-5:")
+    
+    width = 5
+    for item in top_5:
+        width = max(width, len(item[0]))
+    
+    print(f"{"слово":<{width}} | частота")
+    print("-" * (width + 10))
+    for item in top_5:
+        print(f"{item[0]:<{width}} | {item[1]}")
 
-print(f"Всего слов: {len(tokens)}")
-print(f"Уникальных слов: {len(unique_words)}")
-print("Топ-5:")
 
-width = 5
-for item in top_5:
-    width = max(width, len(item[0]))
-
-print(f"{"слово":<{width}} | частота")
-print("-" * (width + 10))
-for item in top_5:
-    print(f"{item[0]:<{width}} | {item[1]}")
+if __name__ == "__main__":
+    text_stats(input())
 ```
 
 ![Задание B](./images/lab03/text_stats.png)
 
 Проверка проводилась запуском программы напрямую командой `echo "какой-то текст" | python3 scr/text_stats.py"`
+
+# Лабораторная работа 4
+
+## Задание A
+
+```python
+import sys
+sys.path.insert(0, "src")
+import csv
+from typing import Iterable, Sequence
+
+def read_text(path: str, encoding: str = "utf-8") -> str:
+    """Возвращает весь текст, находящийся в файле.
+    
+    :param path: путь до файла
+    :type path: str
+    :param encoding: кодировка текста (по умолчанию utf-8)
+    :type encoding: str
+    
+    :raises FileNotFoundError: если файл не найден
+    :raises UnicodeDecodeError: если кодировка не подходит
+    
+    :return: текст, находящийся в файле
+    :rtype: str"""
+    
+    ret = ""
+    with open(path, "r", encoding=encoding) as f:
+        for line in f:
+            ret = "\n".join([ret, line.strip()])
+    return ret[1:]
+
+def write_csv(rows: Iterable[Sequence], path: str | Path, header: tuple[str, ...] | None = None) -> None:
+    """По указанному пути перезаписывает (или создаёт и записывает) файл формата csv с данными переданной таблицы.
+    
+    :param rows: данные таблицы
+    :type rows: Iterable[Sequence]
+    :param path: путь до файла
+    :type path: str | Path
+    :param heading: строка заголовка (опционально)
+    :type heading: tuple[str, ...]
+    
+    :raises ValueError: если строки таблицы имеют разную длину
+    
+    :return: функция записывает данные таблицы в файл
+    :rtype: None"""
+    
+    p = Path(path)
+    table = []
+    if header is not None:
+        table.append(header)
+    table.extend(list(rows))
+    
+    if (len(table) > 0):
+        row_len = len(table[0])
+        for row_number, row in enumerate(table):
+            if len(row) != row_len:
+                raise ValueError(f"Строки должны иметь одинаковую длину, но у строки {row_number} длина не совпадает с длиной строки 0.")
+    
+    with p.open("w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        for row in table:
+            w.writerow(row)
+
+if __name__ == "__main__":
+    print(read_text("data/lab04/input.txt"))
+    write_csv([("мама", 3), ("папа", 1)], "data/lab04/check01.csv", ("слово", "частота"))
+    write_csv([("слово", "частота"), ("мама", 3), ("папа", 1)], "data/lab04/check02.csv")
+    write_csv([], "data/lab04/check03.csv", ("слово", "частота"))
+    write_csv([], "data/lab04/check04.csv")
+```
+
+![Задание A](./images/lab04/io_txt_csv.png)
+
+## Задание B
+
+```python
+import sys
+sys.path.insert(0, "src")
+
+if __name__ == "__main__":
+    from lib.text import normalize, tokenize, count_freq, top_n
+    from lab04.io_txt_csv import read_text, write_csv
+    from lab03.text_stats import text_stats
+    
+    text = read_text("data/lab04/input.txt")
+    table = top_n(count_freq(tokenize(normalize(text))))
+    write_csv(table, "data/lab04/report.csv", ("слово", "частота"))
+    text_stats(text)
+```
+
+![Задание B](./images/lab04/text_report.png)
