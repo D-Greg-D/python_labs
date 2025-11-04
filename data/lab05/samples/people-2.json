@@ -1,0 +1,25 @@
+[
+  {
+    "name": "Danil",
+    "type": "player",
+    "defeated Ender Dragon": true,
+    "game time": 95,
+    "loves": "building",
+    "pets": "wolves"
+  },
+  {
+    "name": "Vlad",
+    "type": "player",
+    "defeated Ender Dragon": true,
+    "game time": 75,
+    "loves": "speedrunning"
+  },
+  {
+    "name": "Rinal",
+    "type": "player",
+    "defeated Ender Dragon": false,
+    "game time": 40,
+    "loves": "mining",
+    "music": true
+  }
+]

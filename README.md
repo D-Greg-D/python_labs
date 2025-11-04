@@ -470,3 +470,89 @@ if __name__ == "__main__":
 ```
 
 ![Задание B](./images/lab04/text_report.png)
+
+# Лабораторная работа 5
+
+## Задание A
+
+```python
+import sys
+sys.path.insert(0, "")
+import json
+import csv
+
+def json_to_csv(json_path: str, csv_path: str) -> None:
+    """
+    Преобразует JSON-файл в CSV.
+    Кодировка UTF-8. Порядок колонок — алфавитный.
+    """
+    with open(json_path, "r", encoding="utf-8") as fin:
+        jsonin = json.load(fin)
+    if isinstance(jsonin, dict):
+        jsonin = [jsonin]
+    elif not isinstance(jsonin, list):
+        raise ValueError("Пустой JSON или неподдерживаемая структура")
+    header = []
+    for item in jsonin:
+        if not isinstance(item, dict):
+            raise ValueError("Пустой JSON или неподдерживаемая структура")
+        header.extend(item.keys())
+    header = sorted(list(set(header)))
+        
+    with open(csv_path, "w", encoding="utf-8") as fout:
+        csvout = csv.DictWriter(fout, fieldnames=header)
+        csvout.writeheader()
+        for entry in jsonin:
+            csvout.writerow(entry)
+
+def csv_to_json(csv_path: str, json_path: str) -> None:
+    """
+    Преобразует CSV в JSON (список словарей).
+    """
+    with open(csv_path, "r", encoding="utf-8") as fin:
+        csvin = list(csv.DictReader(fin))
+        if len(csvin) == 0:
+            raise ValueError("Пустой CSV")
+        with open(json_path, "w", encoding="utf-8") as fout:
+            json.dump(csvin, fout, ensure_ascii=False, indent=2)
+```
+
+В функции `json_to_csv` был выбран алфавитный порядок колонок как более простой и понятный, ибо не все колонки могут иметь значения для первого элемента.
+
+![Задание A1](./images/lab05/json_to_csv.png)
+![Задание A2](./images/lab05/csv_to_json.png)
+
+## Задание B
+
+```python
+import sys
+sys.path.insert(0, "")
+from openpyxl import Workbook
+import csv
+
+def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
+    """
+    Конвертирует CSV в XLSX.
+    """
+    inputSize = True
+    
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Sheet1"
+    
+    with open(csv_path, "r", encoding="utf-8") as fin:
+        for row in csv.reader(fin):
+            inputSize = False
+            ws.append(row)
+    if inputSize:
+        raise ValueError("Пустой CSV")
+    
+    for column in ws.columns:
+        #length = max(len(str(cell.value)) for cell in column)
+        length = max(map(lambda cell: len(str(cell.value)), column))
+        ws.column_dimensions[column[0].column_letter].width = max(8, length) * 1.2
+    
+    wb.save(xlsx_path)
+```
+
+![Задание B](./images/lab05/csv_to_xlsx.png)
