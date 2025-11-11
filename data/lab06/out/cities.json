@@ -1,0 +1,17 @@
+[
+  {
+    "name": "Kochanovo",
+    "type": "base",
+    "population": "42"
+  },
+  {
+    "name": "Flower Lake",
+    "type": "village",
+    "population": "0"
+  },
+  {
+    "name": "Berezhnyovo",
+    "type": "village",
+    "population": "2"
+  }
+]

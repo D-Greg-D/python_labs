@@ -1,6 +1,6 @@
-> # Даниль Григорьянц
->
-> ### БИВТ-25-1
+> # Даниль Григорьянц (БИВТ-25-1)
+> ## Университет МИСИС, Институт компьютерных наук, БИВТ-25-1
+> ### Лаборатные работы по Программированию и алгоритмизации (1 семестр)
 
 # Лабораторная работа 1
 
@@ -556,3 +556,124 @@ def csv_to_xlsx(csv_path: str, xlsx_path: str) -> None:
 ```
 
 ![Задание B](./images/lab05/csv_to_xlsx.png)
+
+# Лабораторная работа 6
+
+## cli_text.py
+
+```python
+import argparse
+from src.lib.text import normalize, tokenize, count_freq, top_n
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="CLI‑утилиты лабораторной №6")
+    subparsers = parser.add_subparsers(dest="command")
+
+    cat_parser = subparsers.add_parser("cat", help="Вывести содержимое файла")
+    cat_parser.add_argument("--input", required=True)
+    cat_parser.add_argument("-n", action="store_true", help="Нумеровать строки")
+
+    stats_parser = subparsers.add_parser("stats", help="Вывести топ самых частых слов")
+    stats_parser.add_argument("--input", required=True)
+    stats_parser.add_argument("--top", type=int, default=5, help="Количество слов в топе")
+
+    args = parser.parse_args()
+    
+    text = []
+    try:
+        with open(args.input, "r") as f:
+            for line in f:
+                text.append(line)
+    except FileNotFoundError:
+        raise FileNotFoundError("Входной файл не найден")
+
+    if args.command == "cat":
+        for line_number, line in enumerate(text):
+            if args.n:
+                print(line_number + 1, line)
+            else:
+                print(line)
+            
+    elif args.command == "stats":
+        top = top_n(count_freq(tokenize(normalize("\n".join(text)))), args.top)
+        
+        print(f"Топ-{args.top}:")
+        
+        width = 5
+        for item in top:
+            width = max(width, len(item[0]))
+        
+        print(f"{"слово":<{width}} | частота")
+        print("-" * (width + 10))
+        for item in top:
+            print(f"{item[0]:<{width}} | {item[1]}")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+![clie_text](./images/lab06/cli_text.png)
+
+## cli_convert.py
+
+```python
+import argparse
+from src.lab05.json_csv import json_to_csv, csv_to_json
+from src.lab05.csv_xlsx import csv_to_xlsx
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description="Конвертеры данных")
+    subparsers = parser.add_subparsers(dest="command")
+
+    p1 = subparsers.add_parser("json2csv")
+    p1.add_argument("--in", dest="input", required=True)
+    p1.add_argument("--out", dest="output", required=True)
+
+    p2 = subparsers.add_parser("csv2json")
+    p2.add_argument("--in", dest="input", required=True)
+    p2.add_argument("--out", dest="output", required=True)
+
+    p3 = subparsers.add_parser("csv2xlsx")
+    p3.add_argument("--in", dest="input", required=True)
+    p3.add_argument("--out", dest="output", required=True)
+
+    args = parser.parse_args()
+
+    if args.command == "json2csv":
+        if args.input[-5:] != ".json":
+            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+        elif args.output[-4:] != ".csv":
+            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+        else:
+            try:
+                json_to_csv(args.input, args.output)
+            except FileNotFoundError:
+                raise FileNotFoundError("Входной файл не найден.")
+    elif args.command == "csv2json":
+        if args.input[-4:] != ".csv":
+            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+        elif args.output[-5:] != ".json":
+            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+        else:
+            try:
+                csv_to_json(args.input, args.output)
+            except FileNotFoundError:
+                raise FileNotFoundError("Входной файл не найден.")
+    elif args.command == "csv2xlsx":
+        if args.input[-4:] != ".csv":
+            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+        elif args.output[-5:] != ".xlsx":
+            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+        else:
+            try:
+                csv_to_xlsx(args.input, args.output)
+            except FileNotFoundError:
+                raise FileNotFoundError("Входной файл не найден.")
+
+
+if __name__ == "__main__":
+    main()
+```
+
+![clie_text](./images/lab06/cli_convert.png)
