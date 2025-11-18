@@ -1,5 +1,5 @@
-a = float(input().replace(',', '.'))
-b = float(input().replace(',', '.'))
+a = float(input().replace(",", "."))
+b = float(input().replace(",", "."))
 
 sum = a + b
 avg = sum / 2

@@ -2,6 +2,7 @@ import argparse
 from src.lab05.json_csv import json_to_csv, csv_to_json
 from src.lab05.csv_xlsx import csv_to_xlsx
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Конвертеры данных")
     subparsers = parser.add_subparsers(dest="command")
@@ -22,9 +23,13 @@ def main() -> None:
 
     if args.command == "json2csv":
         if args.input[-5:] != ".json":
-            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат входного файла неверный. Используйте --help для помощи"
+            )
         elif args.output[-4:] != ".csv":
-            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат выходного файла неверный. Используйте --help для помощи"
+            )
         else:
             try:
                 json_to_csv(args.input, args.output)
@@ -32,9 +37,13 @@ def main() -> None:
                 raise FileNotFoundError("Входной файл не найден.")
     elif args.command == "csv2json":
         if args.input[-4:] != ".csv":
-            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат входного файла неверный. Используйте --help для помощи"
+            )
         elif args.output[-5:] != ".json":
-            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат выходного файла неверный. Используйте --help для помощи"
+            )
         else:
             try:
                 csv_to_json(args.input, args.output)
@@ -42,9 +51,13 @@ def main() -> None:
                 raise FileNotFoundError("Входной файл не найден.")
     elif args.command == "csv2xlsx":
         if args.input[-4:] != ".csv":
-            parser.error("Формат входного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат входного файла неверный. Используйте --help для помощи"
+            )
         elif args.output[-5:] != ".xlsx":
-            parser.error("Формат выходного файла неверный. Используйте --help для помощи")
+            parser.error(
+                "Формат выходного файла неверный. Используйте --help для помощи"
+            )
         else:
             try:
                 csv_to_xlsx(args.input, args.output)

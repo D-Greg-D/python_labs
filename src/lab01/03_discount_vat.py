@@ -1,6 +1,6 @@
-price = float(input().replace(',', '.'))
-discount = float(input().replace(',', '.'))
-vat = float(input().replace(',', '.'))
+price = float(input().replace(",", "."))
+discount = float(input().replace(",", "."))
+vat = float(input().replace(",", "."))
 
 base = price * (1 - discount / 100)
 vat_amount = base * (vat / 100)
