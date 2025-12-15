@@ -861,3 +861,89 @@ def test_csv_to_json(tmp_path):
 ```
 
 ![test](./images/lab07/test.png)
+
+# Лабораторная работа 8
+
+## models.py
+
+```python
+from dataclasses import dataclass
+from datetime import datetime
+from datetime import date
+
+@dataclass
+class Student:
+    fio: str
+    birthdate: str
+    group: str
+    gpa: float
+
+    def __post_init__(self):
+        try:
+            datetime.strptime(self.birthdate, "%Y-%m-%d")
+        except:
+            raise ValueError("Формат даты должен быть YYYY-MM-DD")
+        
+        if not (0 <= self.gpa <= 5):
+            raise ValueError("GPA должен быть между 0 и 5")
+
+    def age(self) -> int:
+        self.__post_init__()
+        b = self.birthdate
+        today = date.today()
+        return today.year - int(b.split("-")[0]) - (today.month < int(b.split("-")[1]) or (today.month == int(b.split("-")[1] and today.day < int(b.split("-")[2]))))
+
+    def to_dict(self) -> dict:
+        self.__post_init__()
+        return {
+            "fio": self.fio,
+            "birthdate": self.birthdate,
+            "group": self.group,
+            "gpa": self.gpa,
+        }
+
+    @classmethod
+    def from_dict(cls, d: dict):
+        fio = d.get("fio", "")
+        birthdate = d.get("birthdate", "")
+        group = d.get("group", "")
+        gpa = d.get("gpa", 0)
+        return cls(fio, birthdate, group, gpa)
+
+    def __str__(self):
+        return f"ФИО: {self.fio}\nДата рождения: {self.birthdate}\nГруппа: {self.group}\nGPA: {self.gpa}\n"
+```
+
+## serialize.py
+
+```python
+import json
+import sys
+sys.path.insert(0, "")
+from src.lab08.models import Student
+
+def students_to_json(students, path):
+    data = [s.to_dict() for s in students]
+    with open(path, "w", encoding="utf-8") as file:
+        json.dump(data, file, ensure_ascii=False, indent=2)
+
+def students_from_json(path) -> list[Student]:
+    with open(path, "r", encoding="utf-8") as file:
+        data = json.load(file)
+    if not isinstance(data, list):
+        data = [data]
+    ret = []
+    for info in data:
+        student = Student(info.get("fio", ""), info.get("birthday", ""), info.get("group", ""), info.get("gpa", ""))
+        student.__post_init__()
+        ret.append(student)
+    return ret
+
+if __name__ == "__main__":
+    students = students_from_json("data/lab08/students_input.json")
+    for student in students:
+        print(f"{student.__str__()}Возраст: {student.age()}\n")
+    students_to_json(students, "data/lab08/students_output.json")
+```
+
+![serialize](./images/lab08/serialize.png)
