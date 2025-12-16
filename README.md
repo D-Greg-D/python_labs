@@ -1026,3 +1026,188 @@ if __name__ == "__main__":
 ```
 
 ![group](./images/lab09/group.png)
+
+# Лаборатная работа 10
+
+## Теория
+
+*Стек* - это структура данных, работающая по принципу LIFO (Last-In, First-Out) - "последним пришёл, первым ушёл". Элементы добавляются и извлекаются только с одного конца (вершины стека).
+Типичные операции:
+- Добавить на вершину - О(1)
+- Удалить с вершины и вернуть элемент - О(1)
+- Посмотреть верхний элемент - О(1)
+- Проверка на пустоту - О(1)
+
+*Очередь* - это структура данных, работающая по принципу FIFO (First-In, First-Out) - "первым пришёл, первым ушёл". Элементы добавляются в конец и извлекаются из начала.
+Типичные операции:
+- Добавить в конец - О(1)
+- Удалить из начала и вернуть элемент - О(1)
+- Посмотреть первый элемент - О(1)
+- Проверка на пустоту - О(1)
+
+*Связный список* - это линейная структура данных, состоящая из узлов, каждый из которых хранит данные и ссылку на следующий (и прошлый, если список двусвязный) узел.
+Типичные операции:
+- Вставка в начало - О(1)
+- Вставка в конец - О(1), если есть указатель на хвост, иначе как на произвольную позицию
+- Удаление из начала - О(1)
+- Поиск элемента по индексу или значению - О(n)
+- Вставка на произвольную найденную позицию - О(1)
+- Удаление из произвольной найденной позиции - О(1)
+
+## structures.py
+
+```python
+from collections import deque
+from typing_extensions import Any
+
+class Stack:
+    data: list
+    
+    def __init__(self):
+        self.data = []
+    
+    def __len__(self) -> int:
+        return len(self.data)
+    
+    def is_empty(self) -> bool:
+        return self.__len__() == 0
+    
+    def push(self, item):
+        self.data.append(item)
+    
+    def pop(self) -> Any:
+        if self.is_empty():
+            raise IndexError("В стеке нет элементов для удаления")
+        return self.data.pop()
+    
+    def peek(self) -> Any | None:
+        if self.is_empty():
+            return None
+        return self.data[-1]
+
+class Queue:
+    data: deque
+    
+    def __init__(self):
+        self.data = deque()
+    
+    def __len__(self) -> int:
+        return len(self.data)
+    
+    def is_empty(self) -> bool:
+        return self.__len__() == 0
+    
+    def enqueue(self, item):
+        self.data.append(item)
+    
+    def dequeue(self) -> Any:
+        if self.is_empty():
+            raise IndexError("В стеке нет элементов для удаления")
+        return self.data.popleft()
+    
+    def peek(self) -> Any | None:
+        if self.is_empty():
+            return None
+        return self.data[0]
+```
+
+## linked_list.py
+
+```python
+class Node:
+    def __init__(self, value, next=None):
+        self.value = value
+        self.next = next
+
+class SinglyLinkedList:
+    head: Node | None
+    tail: Node | None
+    _size: int
+    
+    def __init__(self):
+        self.head = None
+        self.tail = None
+        self._size = 0
+    
+    def __len__(self) -> int:
+        return self._size
+    
+    def _create_first(self, value):
+        item = Node(value)
+        self.head = item
+        self.tail = item
+        self._size = 1
+    
+    def append(self, value):
+        if self.tail is None:
+            self._create_first(value)
+            return
+        
+        item = Node(value)
+        self.tail.next = item
+        self.tail = item
+        self._size += 1
+    
+    def prepend(self, value):
+        if self.tail is None:
+            self._create_first(value)
+            return
+        
+        item = Node(value, self.head)
+        self.head = item
+        self._size += 1
+    
+    def insert(self, idx, value):
+        if not isinstance(idx, int) or idx < 0 or idx > self._size:
+            raise IndexError("Невозможно вставить элемент по индексу: индекс невероятен")
+        if idx == 0:
+            self.prepend(value)
+            return
+        if idx == self.__len__():
+            self.append(value)
+            return
+        
+        item = self.head
+        for _ in range(idx - 1):
+            if isinstance(item, Node):
+                item = item.next
+        if isinstance(item, Node):
+            new_item = Node(value, item.next)
+            item.next = new_item
+        self._size += 1
+    
+    def remove_at(self, idx):
+        if self.head is None or not isinstance(idx, int) or idx < 0 or idx >= self.__len__():
+            raise IndexError(f"{self.__len__()}Невозможно удалить элемент по индексу: индекс невероятен")
+        if idx == 0:
+            self.head = self.head.next
+            return
+        
+        item = self.head
+        for _ in range(idx - 1):
+            if isinstance(item, Node):
+                item = item.next
+        if isinstance(item, Node) and isinstance(item.next, Node):
+            item.next = item.next.next
+        if idx == self.__len__() - 1:
+            self.tail = item
+        self._size -= 1
+    
+    def __iter__(self):
+        ret = []
+        item = self.head
+        while isinstance(item, Node):
+            ret.append(item)
+            item = item.next
+        return ret
+    
+    def __repr__(self) -> str:
+        ret = []
+        item = self.head
+        while isinstance(item, Node):
+            ret.append(item.value)
+            item = item.next
+        return str(ret)
+```
+
+![structures](./images/lab10/structures.png)
